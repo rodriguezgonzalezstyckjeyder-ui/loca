@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Armeria Deportivos Herrera</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Variables de colores para tema oscuro */
+    :root {
+      --bg-dark: #121212;
+      --bg-card: #1e1e1e;
+      --bg-navbar: #0a0a0a;
+      --primary-color: #8a0303;
+      --secondary-color: #9d0a0a;
+      --accent-color: #ff2a2a;
+      --text-light: #ffffff;
+      --text-muted: #a0a0a0;
+      --border-dark: #333333;
+    }
+    
+    /* Estilos generales */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-light);
+      background-color: var(--bg-dark);
+      line-height: 1.6;
+      padding-top: 80px; /* Para compensar la navbar fija */
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+    }
+    
+    .main-content {
+      flex: 1;
+    }
+    
+    /* Barra de navegación con movimiento */
+    .navbar {
+      background-color: var(--bg-navbar);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid var(--border-dark);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+    
+    .navbar.shrink {
+      padding: 0.4rem 1rem;
+      background-color: rgba(10, 10, 10, 0.95);
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      color: var(--text-light) !important;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .navbar.shrink .navbar-brand {
+      font-size: 1.3rem;
+    }
+    
+    .navbar-nav .nav-link {
+      color: var(--text-light) !important;
+      font-weight: 500;
+      margin: 0 0.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .navbar-nav .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--accent-color);
+      transition: width 0.3s ease;
+    }
+    
+    .navbar-nav .nav-link:hover::after,
+    .navbar-nav .nav-link.active::after {
+      width: 100%;
+    }
+    
+    .navbar-nav .nav-link:hover {
+      color: var(--accent-color) !important;
+      transform: translateY(-2px);
+    }
+    
+    .navbar-toggler {
+      border-color: var(--text-light);
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+    
+    .dropdown-menu {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-dark);
+    }
+    
+    .dropdown-item {
+      color: var(--text-light);
+      transition: all 0.3s ease;
+    }
+    
+    .dropdown-item:hover {
+      background-color: var(--primary-color);
+      color: var(--text-light);
+      padding-left: 1.5rem;
+    }
+    
+    /* Imagen centrada */
+    .img-container {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+    
+    .img-fluid {
+      max-width: 90%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s ease;
+    }
+    
+    .img-fluid:hover {
+      transform: scale(1.02);
+    }
+    
+    /* Secciones */
+    section {
+      padding: 5rem 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+      color: var(--text-light);
+      position: relative;
+      padding-bottom: 1rem;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background-color: var(--primary-color);
+    }
+    
+    /* Tarjetas de productos */
+    .card {
+      border: none;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      background-color: var(--bg-card);
+      color: var(--text-light);
+      height: 100%;
+    }
+
+    .card-link {
+     display: block;
+     color: inherit; /* Mantiene el color del texto */
+     text-decoration: none; /* Quita subrayado */
+    }
+
+    .card-link:hover {
+     text-decoration: none;
+     cursor: pointer;
+     box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Efecto hover opcional */
+   }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    }
+    
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .card:hover .card-img-top {
+      transform: scale(1.05);
+    }
+    
+    .card-title {
+      color: var(--text-light);
+      font-weight: 700;
+    }
+    
+    .card-text {
+      color: var(--text-muted);
+    }
+    
+    /* Botones */
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      padding: 0.8rem 2rem;
+      font-weight: 600;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--accent-color);
+      border-color: var(--accent-color);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 42, 42, 0.3);
+    }
+    
+    /* Footer - CORREGIDO */
+    footer {
+      background-color: var(--bg-navbar);
+      color: var(--text-light);
+      padding: 3rem 0 2rem;
+      border-top: 1px solid var(--border-dark);
+      text-align: center;
+      margin-top: auto;
+      width: 100%;
+    }
+    
+    /* Animaciones de entrada */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding-top: 70px;
+      }
+      
+      .navbar-brand {
+        font-size: 1.2rem;
+      }
+      
+      section {
+        padding: 3rem 0;
+        min-height: auto;
+      }
+      
+      footer .row > div {
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      
+      footer .text-md-end {
+        text-align: center !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Barra de navegación con movimiento -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#inicio">
+        Armería Deportivos Herrera
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="#inicio">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#productos">Productos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#servicios">Servicios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#nos-encontramos">Nos encuentras</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <!-- Sección de Inicio -->
+    <section id="inicio" class="bg-dark">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6 fade-in">
+            <h1 class="display-4 fw-bold mb-4">Armería Deportivos Herrera</h1>
+            <p class="lead mb-4">MANTENIMIENTO PREVENTIVO Y CORRECTIVO
+               <p>EMBELLECIMIENTO TÁCTICO Y CLÁSICO.</p>
+               <p>Cerakote | Pavonado | Chapado en oro | Cromado</p>
+               <p>Licencia DCCAE CGFM </p>
+               <p>Ventas de accesorios.</p>
+               <p>SOLO SE RECIBEN ARMAS CON SUS RESPECTIVOS PERMISOS DE TENENCIA O PORTE VIGENTES.</p>
+          </div>
+          <div class="col-lg-6 fade-in">
+            <div class="img-container">
+              <img src="imagenes/imagen ADH17.png" class="img-fluid" alt="Armería Deportivos Herrera">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Productos -->
+    <section id="productos" class="bg-dark" style="text-align: center; padding: 40px 0;">
+      <div class="container" style="display: inline-block; text-align: left;">
+        <h2 class="section-title" style="text-align: center;">Nuestros Productos Destacados</h2>
+        
+        <div class="row justify-content-center">
+          <div class="col-md-4 mb-4 fade-in">
+            <div class="card">
+              <img src="imagenes/imagen ADH40.webp" class="img-fluid card-img-top" alt="Rifles deportivos">
+              <div class="card-body">
+                <h5 class="card-title">Servicios tecnicos</h5>
+                <p class="card-text">Algunos de nuestros proyectos hasta el momento.</p>
+                <a href="index 2.html" class="btn btn-primary">Ver más</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-4 mb-4 fade-in">
+            <div class="card">
+              <img src="imagenes/imagen ADH5.jpg" class="img-fluid card-img-top" alt="Pistolas">
+              <div class="card-body">
+                <h5 class="card-title">Trabajos y restauraciones</h5>
+                <p class="card-text">Amplia variedad de modificaciones, embellecimiento y tratamiento del arma 
+                  con una garantía de aproximadamente 6 a 8 meses.</p>
+                <a href="index 3.html" class="btn btn-primary">Ver más</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Otras secciones -->
+    <section id="servicios" class="bg-dark">
+      <div class="container">
+        <h2 class="section-title">Nuestros Servicios</h2>
+        <style>
+          .row {
+            display: flex;
+            justify-content: center;
+          }
+        </style>
+
+        <div class="row">
+          <div class="col-md-6 fade-in">
+            <a href="index 4.html" class="card-link">
+              <div class="card mb-4">
+                <div class="card-body text-center">
+                  <i class="fas fa-tools fa-3x mb-3 text-primary"></i>
+                  <h3>Mantenimiento y Reparación</h3>
+                  <p>Servicio técnico especializado para todo tipo de armas deportivas.</p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="nos-encontramos" class="bg-dark">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <h2 class="section-title">Nos encuentras</h2>
+            <p>Cl. 9 #37 A - 62 local, Puente Aranda, Bogotá, Cundinamarca.</p>
+            <p>3132578414.</p>
+            <p>facebook.com/armeriadeportivosherrera</p>
+            <p>instagram.com/armeriadeportivosherrera</p>
+            <p>tiktok.com/armeriadeportivosherrera</p>
+          </div>
+          <div class="col-lg-6">
+            <img src="imagenes/imagen ADH16.jfif" class="img-fluid" alt="Ubicación">
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer - CORREGIDO -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>Armeria Deportivos Herrera</h5>
+          <p>Especialistas en reparación y mantenimiento de armas deportivas.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+      <hr class="mt-4 mb-4">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <p>&copy; 2023 Armería Deportivos Herrera. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  
+  <script>
+    // JavaScript para los efectos de movimiento
+    document.addEventListener('DOMContentLoaded', function() {
+      // Efecto de reducción de la navbar al hacer scroll
+      const navbar = document.querySelector('.navbar');
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+          navbar.classList.add('shrink');
+        } else {
+          navbar.classList.remove('shrink');
+        }
+      });
+
+      // Desplazamiento suave al hacer clic en los enlaces
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            // Actualizar clase activa en navbar
+            document.querySelectorAll('.nav-link').forEach(link => {
+              link.classList.remove('active');
+            });
+            this.classList.add('active');
+            
+            // Desplazamiento suave
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+
+      // Animación de elementos al hacer scroll
+      const fadeElements = document.querySelectorAll('.fade-in');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      fadeElements.forEach(element => {
+        observer.observe(element);
+      });
+
+      // Actualizar navbar según la sección visible
+      window.addEventListener('scroll', function() {
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        let currentSection = '';
+        
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - 100;
+          const sectionHeight = section.clientHeight;
+          
+          if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+            currentSection = section.getAttribute('id');
+          }
+        });
+        
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + currentSection) {
+            link.classList.add('active');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
